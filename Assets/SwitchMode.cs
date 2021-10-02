@@ -10,8 +10,8 @@ public class SwitchMode : MonoBehaviour
     }
     public InteractMode interactMode = InteractMode.MOVING;
 
-    public FreeCam freeCam;
-    public BlockPlacing blockPlacing;
+    FreeCam freeCam;
+    BlockPlacing blockPlacing;
 
     private void Awake()
     {
@@ -22,7 +22,7 @@ public class SwitchMode : MonoBehaviour
     private void Start()
     {
         interactMode = InteractMode.MOVING;
-        blockPlacing.enabled =false;
+        blockPlacing.enabled = false;
     }
     private void Update()
     {
@@ -40,11 +40,14 @@ public class SwitchMode : MonoBehaviour
                 interactMode = InteractMode.PLACING;
                 freeCam.enabled = false;
                 blockPlacing.enabled = true;
+                blockPlacing.CreateViz();
                 break;
             case InteractMode.PLACING:
                 interactMode = InteractMode.MOVING;
                 freeCam.enabled = true;
                 blockPlacing.enabled = false;
+                if (blockPlacing.objHeld == null) break;
+                Destroy(blockPlacing.objHeld);
                 break;
             default:
                 break;
