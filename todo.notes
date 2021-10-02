@@ -1,6 +1,6 @@
 [√] Camera controls
-[ ] Block placement control (moving and roation)
-[ ] Switch from one mode to the other
+[√] Block placement control (moving and roation)
+[√] Switch from one mode to the other
 [ ] Placing blocks with overlap check
 [ ] block texture
 [ ] overall look
