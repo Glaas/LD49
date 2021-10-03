@@ -48,6 +48,7 @@ public class SwitchMode : MonoBehaviour
                 blockPlacing.enabled = false;
                 if (blockPlacing.objHeld == null) break;
                 Destroy(blockPlacing.objHeld);
+                Destroy(blockPlacing.objHeldShadowInstance);
                 break;
             default:
                 break;

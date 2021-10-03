@@ -96,6 +96,16 @@ public class FreeCam : MonoBehaviour
             transform.position = transform.position + (-Vector3.up * movementSpeed * Time.deltaTime);
         }
 
+        var pos = transform.position;
+
+        // z 2.5 / -22
+        // y -.65
+        //x 3.3 / -21.5
+        pos.x = Mathf.Clamp(pos.x, -30.5f, 8.3f);
+        pos.y = Mathf.Clamp(pos.y, -.65f, float.MaxValue);
+        pos.z = Mathf.Clamp(pos.z, -28, 8.5f);
+        transform.position = pos;
+
         if (looking)
         {
             float newRotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * freeLookSensitivity;
