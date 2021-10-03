@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class OverlapCheck : MonoBehaviour
 {
-   public Material transparentNormal, transparentWarning;
+    public Material transparentNormal, transparentWarning;
 
-   public bool isOverlapping;
+    public bool isOverlapping;
 
-   private void OnTriggerStay(Collider other) {
-       isOverlapping = true;
-       GetComponent<MeshRenderer>().material = transparentWarning;
-   }
-   private void OnTriggerExit(Collider other) {
-       isOverlapping = false;
-       GetComponent<MeshRenderer>().material = transparentNormal;
-   }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<MeshRenderer>()) return;
+        isOverlapping = true;
+        GetComponent<MeshRenderer>().material = transparentWarning;
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        isOverlapping = false;
+        GetComponent<MeshRenderer>().material = transparentNormal;
+    }
 
 }
