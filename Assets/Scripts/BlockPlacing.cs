@@ -6,6 +6,11 @@ using UnityEngine;
 public class BlockPlacing : MonoBehaviour
 {
     public GameObject block, blockViz, shadowPrefab;
+    public GameObject plankPrefab;
+    public GameObject plankViz;
+
+    public GameObject itemChosen;
+
     public GameObject objHeld, objHeldShadowInstance;
     SwitchMode switchMode;
     FreeCam freeCam;
@@ -15,39 +20,51 @@ public class BlockPlacing : MonoBehaviour
 
     private void Awake()
     {
+        switchMode = FindObjectOfType<SwitchMode>();
+        freeCam = FindObjectOfType<FreeCam>();
 
     }
     // Start is called before the first frame update
     void Start()
     {
-        switchMode = FindObjectOfType<SwitchMode>();
-        freeCam = FindObjectOfType<FreeCam>();
+        itemChosen = blockViz;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (switchMode.interactMode)
-        {
-            case SwitchMode.InteractMode.MOVING:
-                break;
-            case SwitchMode.InteractMode.PLACING:
-                MoveCube();
-                InstantiateCube();
-                break;
-            default:
-                break;
-        }
 
+        MoveCube();
+        InstantiateCube();
+
+
+
+    }
+    void SwitchObject()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            itemChosen = blockViz;
+            CreateViz();
+            print("Chose block");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            itemChosen = plankViz;
+            CreateViz();
+            print("Chose plank");
+        }
     }
     public void CreateViz()
     {
+        Destroy(objHeld);
+        Destroy(objHeldShadowInstance);
         if (objHeld == null)
         {
+            if (itemChosen == null) itemChosen = blockViz;
 
-
-
-            objHeld = GameObject.Instantiate(blockViz, Camera.main.transform.forward, Quaternion.identity);
+            objHeld = GameObject.Instantiate(itemChosen, Camera.main.transform.forward, Quaternion.identity);
 
             objHeld.transform.position = (Camera.main.transform.position + (Camera.main.transform.forward * 3));
             Transform tr = Camera.main.transform;
@@ -63,6 +80,7 @@ public class BlockPlacing : MonoBehaviour
     {
 
         if (objHeld == null) CreateViz();
+        SwitchObject();
 
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -72,7 +90,7 @@ public class BlockPlacing : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            movementSpeed /=1.2f;
+            movementSpeed /= 1.2f;
             FindObjectOfType<SwitchMode>().DisplayControls();
         }
         if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
@@ -136,7 +154,6 @@ public class BlockPlacing : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             hitpos = hit.point;
-            print("hit, moving at " + hit.point.ToString() + "btw I hit " + hit.collider.name);
 
         }
         objHeldShadowInstance.transform.position = hitpos + (Vector3.up / 100);// + new Vector3(0, .001f, 0);
@@ -154,7 +171,7 @@ public class BlockPlacing : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (objHeld.GetComponent<OverlapCheck>().isOverlapping) return;
-            GameObject.Instantiate(block, objHeld.transform.position, objHeld.transform.rotation);
+            GameObject.Instantiate(itemChosen == blockViz ? block : plankPrefab, objHeld.transform.position, objHeld.transform.rotation);
             AudioSource.PlayClipAtPoint(FindObjectOfType<SFXBrain>().placedSFX, Vector3.zero);
 
             Destroy(objHeld);
