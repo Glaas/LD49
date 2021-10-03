@@ -9,17 +9,19 @@ public class BlockPlacing : MonoBehaviour
     public GameObject objHeld, objHeldShadowInstance;
     SwitchMode switchMode;
     FreeCam freeCam;
+    public float movementSpeed = 10;
+
     bool followCursor = false;
 
     private void Awake()
     {
-        switchMode = FindObjectOfType<SwitchMode>();
-        freeCam = FindObjectOfType<FreeCam>();
+
     }
     // Start is called before the first frame update
     void Start()
     {
-
+        switchMode = FindObjectOfType<SwitchMode>();
+        freeCam = FindObjectOfType<FreeCam>();
     }
 
     // Update is called once per frame
@@ -56,17 +58,32 @@ public class BlockPlacing : MonoBehaviour
                 objHeld.transform.forward = tr.forward;
                 objHeld.transform.right = tr.right;
 
+                objHeldShadowInstance = GameObject.Instantiate(shadowPrefab, objHeld.transform.position + (Vector3.down), shadowPrefab.transform.rotation);
             }
-            objHeldShadowInstance = GameObject.Instantiate(shadowPrefab, objHeld.transform.position + (Vector3.down), shadowPrefab.transform.rotation);
         }
     }
 
     void MoveCube()
     {
 
-        var movementSpeed = freeCam.movementSpeed;
-
         if (objHeld == null) CreateViz();
+
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            followCursor = followCursor ? false : true;
+            FindObjectOfType<UnityEngine.UI.Toggle>().isOn = followCursor;
+        }
+        if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            movementSpeed -= .5f;
+            FindObjectOfType<SwitchMode>().DisplayControls();
+        }
+        if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            movementSpeed += .5f;
+            FindObjectOfType<SwitchMode>().DisplayControls();
+        }
 
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
@@ -101,12 +118,12 @@ public class BlockPlacing : MonoBehaviour
 
         if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.PageUp))
         {
-            objHeld.transform.position = objHeld.transform.position + (Vector3.up * movementSpeed * Time.deltaTime);
+            //objHeld.transform.position = objHeld.transform.position + (Vector3.up * movementSpeed * Time.deltaTime);
         }
 
         if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.PageDown))
         {
-            objHeld.transform.position = objHeld.transform.position + (-Vector3.up * movementSpeed * Time.deltaTime);
+            //objHeld.transform.position = objHeld.transform.position + (-Vector3.up * movementSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.Comma) || Input.mouseScrollDelta.y == -1)
         {
@@ -117,6 +134,7 @@ public class BlockPlacing : MonoBehaviour
             objHeld.transform.Rotate((-Vector3.up * movementSpeed * 10) * Time.deltaTime);
         }
 
+        if (objHeld == null) return;
         Ray ray = new Ray(objHeld.transform.position, Vector3.down);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
@@ -145,14 +163,5 @@ public class BlockPlacing : MonoBehaviour
             Destroy(objHeldShadowInstance);
         }
 
-    }
-
-    void OnGUI()
-    {
-        if (GUI.Button(new Rect(30, 80, 100, 35), "Grab Block"))
-        {
-            objHeld = blockViz;
-        }
-        followCursor = GUI.Toggle(new Rect(30, 120, 200, 100), followCursor, "Camera follow cursor");
     }
 }

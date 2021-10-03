@@ -48,14 +48,19 @@ public class FreeCam : MonoBehaviour
     /// Set to true when free looking (on right mouse button).
     /// </summary>
     private bool looking = false;
-    public KeyCode fastModeKey;
-    public KeyCode fastModeAltKey;
 
     void Update()
     {
-        var fastMode = (Input.GetKey(fastModeKey) || Input.GetKey(fastModeAltKey)) ? true : false;
-        var movementSpeed = fastMode ? this.fastMovementSpeed : this.movementSpeed;
-
+        if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
+        {
+            movementSpeed -= .5f;
+            FindObjectOfType<SwitchMode>().DisplayControls();
+        }
+        if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            movementSpeed += .5f;
+            FindObjectOfType<SwitchMode>().DisplayControls();
+        }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
         {
             transform.position = transform.position + (-transform.right * movementSpeed * Time.deltaTime);
@@ -76,25 +81,16 @@ public class FreeCam : MonoBehaviour
             transform.position = transform.position + (-transform.forward * movementSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Q)|| Input.GetKey(KeyCode.PageUp))
         {
             transform.position = transform.position + (transform.up * movementSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.E)|| Input.GetKey(KeyCode.PageDown))
         {
             transform.position = transform.position + (-transform.up * movementSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.PageUp))
-        {
-            transform.position = transform.position + (Vector3.up * movementSpeed * Time.deltaTime);
-        }
-
-        if (Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.PageDown))
-        {
-            transform.position = transform.position + (-Vector3.up * movementSpeed * Time.deltaTime);
-        }
 
         var pos = transform.position;
 
@@ -116,18 +112,10 @@ public class FreeCam : MonoBehaviour
         float axis = Input.GetAxis("Mouse ScrollWheel");
         if (axis != 0)
         {
-            var zoomSensitivity = fastMode ? this.fastZoomSensitivity : this.zoomSensitivity;
             transform.position = transform.position + transform.forward * axis * zoomSensitivity;
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            StartLooking();
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
-        {
-            StopLooking();
-        }
+        StartLooking();
     }
 
     void OnDisable()

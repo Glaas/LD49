@@ -9,7 +9,10 @@ public class SwitchMode : MonoBehaviour
         MOVING, PLACING
     }
     public InteractMode interactMode = InteractMode.MOVING;
-
+    public TMPro.TextMeshProUGUI controlsText;
+    string movingControlsString;
+    string placementControls;
+    GameObject followCamToggle;
     FreeCam freeCam;
     BlockPlacing blockPlacing;
 
@@ -17,12 +20,17 @@ public class SwitchMode : MonoBehaviour
     {
         freeCam = FindObjectOfType<FreeCam>();
         blockPlacing = FindObjectOfType<BlockPlacing>();
+        controlsText = GameObject.Find("controlsText").GetComponent<TMPro.TextMeshProUGUI>();
+        followCamToggle = GameObject.Find("FollowCam");
     }
 
     private void Start()
     {
         interactMode = InteractMode.MOVING;
         blockPlacing.enabled = false;
+        followCamToggle.SetActive(false);
+        DisplayControls();
+
     }
     private void Update()
     {
@@ -38,12 +46,14 @@ public class SwitchMode : MonoBehaviour
         {
             case InteractMode.MOVING:
                 interactMode = InteractMode.PLACING;
+                followCamToggle.SetActive(true);
                 freeCam.enabled = false;
                 blockPlacing.enabled = true;
                 blockPlacing.CreateViz();
                 break;
             case InteractMode.PLACING:
                 interactMode = InteractMode.MOVING;
+                followCamToggle.SetActive(false);
                 freeCam.enabled = true;
                 blockPlacing.enabled = false;
                 if (blockPlacing.objHeld == null) break;
@@ -53,11 +63,15 @@ public class SwitchMode : MonoBehaviour
             default:
                 break;
         }
+        DisplayControls();
 
     }
-    private void OnGUI()
+    public void DisplayControls()
     {
-        string typedisplay = interactMode == InteractMode.MOVING ? "Moving" : "Placing";
-        GUI.Label(new Rect(30, 50, 200, 100), $"Interaction type : {typedisplay}");
+        string i = "State : " + (interactMode == InteractMode.MOVING ? "Camera" : "Placing");
+        movingControlsString = $"Move : WASD or arrow keys\nAltitude : A/Q or pgUp/pgDown \nMove speed : {freeCam.movementSpeed} (+ and - key to adjust)";
+        placementControls = $"Move : WASD or arrow keys\nAltitude : A/Q or pgUp/pgDown \nMove speed : {blockPlacing.movementSpeed} (+ and - key to adjust)\nPlace a block : Spacebar";
+        var buffer = interactMode == InteractMode.MOVING ? movingControlsString : placementControls;
+        controlsText.text = i + "\n" + buffer;
     }
 }
