@@ -49,16 +49,22 @@ public class FreeCam : MonoBehaviour
     /// </summary>
     private bool looking = false;
 
+    private void OnEnable()
+    {
+        StartLooking();
+
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            movementSpeed -= .5f;
+            movementSpeed /= 1.25f;
             FindObjectOfType<SwitchMode>().DisplayControls();
         }
         if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            movementSpeed += .5f;
+            movementSpeed *= 1.25f;
             FindObjectOfType<SwitchMode>().DisplayControls();
         }
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
@@ -81,12 +87,12 @@ public class FreeCam : MonoBehaviour
             transform.position = transform.position + (-transform.forward * movementSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.Q)|| Input.GetKey(KeyCode.PageUp))
+        if (Input.GetKey(KeyCode.Q) || Input.GetKey(KeyCode.PageUp))
         {
             transform.position = transform.position + (transform.up * movementSpeed * Time.deltaTime);
         }
 
-        if (Input.GetKey(KeyCode.E)|| Input.GetKey(KeyCode.PageDown))
+        if (Input.GetKey(KeyCode.E) || Input.GetKey(KeyCode.PageDown))
         {
             transform.position = transform.position + (-transform.up * movementSpeed * Time.deltaTime);
         }
@@ -115,13 +121,9 @@ public class FreeCam : MonoBehaviour
             transform.position = transform.position + transform.forward * axis * zoomSensitivity;
         }
 
-        StartLooking();
     }
 
-    void OnDisable()
-    {
-        StopLooking();
-    }
+    
 
     /// <summary>
     /// Enable free looking.

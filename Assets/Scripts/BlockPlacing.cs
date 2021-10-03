@@ -72,12 +72,12 @@ public class BlockPlacing : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            movementSpeed -= .5f;
+            movementSpeed /=1.2f;
             FindObjectOfType<SwitchMode>().DisplayControls();
         }
         if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            movementSpeed += .5f;
+            movementSpeed *= 1.2f;
             FindObjectOfType<SwitchMode>().DisplayControls();
         }
 

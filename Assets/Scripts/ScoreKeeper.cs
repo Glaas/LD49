@@ -33,8 +33,8 @@ public class ScoreKeeper : MonoBehaviour
         {
             maxScore = totalScore;
         }
-        scoreText.text = $"Current score : {totalScore}.\n" +
-        $"Max score : {maxScore}.\n";
+        scoreText.text = $"Current score : {totalScore}\n" +
+        $"Max score : {maxScore}\n";
 
 
     }
