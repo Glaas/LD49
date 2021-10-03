@@ -155,7 +155,7 @@ public class BlockPlacing : MonoBehaviour
         {
             if (objHeld.GetComponent<OverlapCheck>().isOverlapping) return;
             GameObject.Instantiate(block, objHeld.transform.position, objHeld.transform.rotation);
-            AudioSource.PlayClipAtPoint(FindObjectOfType<SFXBrain>().placedSFX, transform.forward + Vector3.one);
+            AudioSource.PlayClipAtPoint(FindObjectOfType<SFXBrain>().placedSFX, Vector3.zero);
 
             Destroy(objHeld);
             Destroy(objHeldShadowInstance);

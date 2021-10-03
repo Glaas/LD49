@@ -42,7 +42,7 @@ public class SwitchMode : MonoBehaviour
 
     public void ToggleMode()
     {
-        AudioSource.PlayClipAtPoint(FindObjectOfType<SFXBrain>().toggleSFX, transform.forward + Vector3.one);
+        AudioSource.PlayClipAtPoint(FindObjectOfType<SFXBrain>().toggleSFX, Vector3.zero);
         switch (interactMode)
         {
             case InteractMode.MOVING:
