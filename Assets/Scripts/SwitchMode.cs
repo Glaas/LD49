@@ -70,8 +70,8 @@ public class SwitchMode : MonoBehaviour
     public void DisplayControls()
     {
         string i = "State : " + (interactMode == InteractMode.MOVING ? "Camera" : "Placing");
-        movingControlsString = $"Move : WASD or arrow keys\nAltitude : A/Q or pgUp/pgDown \nMove speed : {freeCam.movementSpeed.ToString("F1")} (+ and - key to adjust)";
-        placementControls = $"Move : WASD or arrow keys\nAltitude : A/Q or pgUp/pgDown \nMove speed : {blockPlacing.movementSpeed.ToString("F1")} (+ and - key to adjust)\nRotate : Period and comma keys / scrollwheel\nPlace a block : Spacebar";
+        movingControlsString = $"Switch mode : TAB\nMove : WASD or arrow keys\nAltitude : A/Q or pgUp/pgDown \nMove speed : {freeCam.movementSpeed.ToString("F1")} (+ and - key to adjust)\n\nTutorial : Enter/Return key";
+        placementControls = $"Switch mode : TAB\nMove : WASD or arrow keys\nAltitude : A/Q or pgUp/pgDown \nMove speed : {blockPlacing.movementSpeed.ToString("F1")} (+ and - key to adjust)\nRotate : Period and comma keys / scrollwheel\nPlace a block : Spacebar\n\nTutorial : Enter/Return key";
         var buffer = interactMode == InteractMode.MOVING ? movingControlsString : placementControls;
         controlsText.text = i + "\n" + buffer;
     }
