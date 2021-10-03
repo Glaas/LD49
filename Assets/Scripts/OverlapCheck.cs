@@ -10,7 +10,6 @@ public class OverlapCheck : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<MeshRenderer>()) return;
         isOverlapping = true;
         GetComponent<MeshRenderer>().material = transparentWarning;
     }
