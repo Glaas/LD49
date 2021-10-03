@@ -44,22 +44,18 @@ public class BlockPlacing : MonoBehaviour
     {
         if (objHeld == null)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ViewportPointToRay(new Vector3(.5f, .5f, 0));
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                Transform objectHit = hit.transform;
 
-                objHeld = GameObject.Instantiate(blockViz, objectHit.transform.position, Quaternion.identity);
 
-                objHeld.transform.position = (Camera.main.transform.position + (Camera.main.transform.forward * 3));
-                Transform tr = Camera.main.transform;
-                objHeld.transform.forward = tr.forward;
-                objHeld.transform.right = tr.right;
+            objHeld = GameObject.Instantiate(blockViz, Camera.main.transform.forward, Quaternion.identity);
 
-                objHeldShadowInstance = GameObject.Instantiate(shadowPrefab, objHeld.transform.position + (Vector3.down), shadowPrefab.transform.rotation);
-            }
+            objHeld.transform.position = (Camera.main.transform.position + (Camera.main.transform.forward * 3));
+            Transform tr = Camera.main.transform;
+            objHeld.transform.forward = tr.forward;
+            objHeld.transform.right = tr.right;
+
+            objHeldShadowInstance = GameObject.Instantiate(shadowPrefab, objHeld.transform.position + (Vector3.down), shadowPrefab.transform.rotation);
+
         }
     }
 
@@ -159,6 +155,8 @@ public class BlockPlacing : MonoBehaviour
         {
             if (objHeld.GetComponent<OverlapCheck>().isOverlapping) return;
             GameObject.Instantiate(block, objHeld.transform.position, objHeld.transform.rotation);
+            AudioSource.PlayClipAtPoint(FindObjectOfType<SFXBrain>().placedSFX, transform.forward + Vector3.one);
+
             Destroy(objHeld);
             Destroy(objHeldShadowInstance);
         }
